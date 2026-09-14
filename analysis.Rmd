@@ -10,117 +10,45 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Libraries and Packages
 ```{r}
-library(tidyverse)
 library(readxl)
-
-install.packages("janitor")
 library(janitor)
+library(dplyr)
 ```
 
 ```{r}
 SurveyResponses <- read_excel("SurveyResponses.xlsx")
 View(SurveyResponses)
-```
 
+#Summary of all variables
+summary(SurveyResponses)
 
-```{r}
-SurveyResponses %>%
-  names()
+#Frequency tables
+table(SurveyResponses$Gender)
+table(SurveyResponses$`Age Group`)
+table(SurveyResponses$`Health Insurance`)
+table(SurveyResponses$`Healthcare Checkup`)
+table(SurveyResponses$`Sexual Behaviors`)
+table(SurveyResponses$`Positive STI Test`)
+table(SurveyResponses$`Housing Situation`)
+table(SurveyResponses$Cost)
 
-score_map <- c(
-  "Definitely willing" = 4,
-  "Probably willing" = 3,
-  "Unsure" = 2,
-  "Probably not willing" = 1,
-  "Definitely not willing" = 0
-)
+#Cross tabs
+table(SurveyResponses$Gender, SurveyResponses$`Healthcare Checkup`)
+table(SurveyResponses$`Health Insurance`, SurveyResponses$`Healthcare Checkup`)
+table(SurveyResponses$Gender, SurveyResponses$`Health Insurance`)
+table(SurveyResponses$`Sexual Behaviors`, SurveyResponses$`Positive STI Test`)
 
-# Calculate average score from dataset column
-average_score <- SurveyResponses %>%
-  mutate(score = score_map[WillingnessTest]) %>%
-  summarise(avg = mean(score, na.rm = TRUE))
+#Chi square tests
+tbl_gender_checkup <- table(SurveyResponses$Gender,SurveyResponses$`Healthcare Checkup`)
+chisq.test(tbl_gender_checkup)
 
-average_score
+tbl_insurance_checkup <- table(SurveyResponses$`Health Insurance`,SurveyResponses$`Healthcare Checkup`)
+chisq.test(tbl_insurance_checkup)
 
-average_score <- SurveyResponses %>%
-  mutate(score = score_map[WillingnessTestPaid]) %>%
-  summarise(avg = mean(score, na.rm = TRUE))
+tbl_behavior_sti <- table(SurveyResponses$`Sexual Behaviors`,SurveyResponses$`Positive STI Test`)
+chisq.test(tbl_behavior_sti)
 
-average_score
+#Logistic regression
 
-average_score <- SurveyResponses %>%
-  mutate(score = score_map[SampleCollectionCorrect]) %>%
-  summarise(avg = mean(score, na.rm = TRUE))
-
-average_score
-
-average_score <- SurveyResponses %>%
-  mutate(score = score_map[AccurateResults]) %>%
-  summarise(avg = mean(score, na.rm = TRUE))
-
-average_score
-
-average_score <- SurveyResponses %>%
-  mutate(score = score_map[AccuratelyInterpretResults]) %>%
-  summarise(avg = mean(score, na.rm = TRUE))
-
-average_score
-
-average_score <- SurveyResponses %>%
-  mutate(score = score_map[PositiveTestNextSteps]) %>%
-  summarise(avg = mean(score, na.rm = TRUE))
-
-average_score
-
-
-
-# Define keywords for sample types
-methods <- c("Oral swab", "Urine sample", "Finger prick")
-
-# Count number of methods selected per row
-SampleSummary <- SurveyResponses %>%
-  mutate(
-    # Split each entry into individual methods
-    items = str_split(SampleMethod, pattern = ",\\s*"),
-    
-    # Count how many of the 3 methods appear
-    method_count = sapply(items, function(x) sum(methods %in% x))
-  )
-
-# Frequency of each original choice
-choice_counts <- SampleSummary %>%
-  count(SampleMethod)
-
-# Count how many selected 1, 2, or 3 methods
-count_by_number <- SampleSummary %>%
-  count(method_count)
-
-choice_counts
-
-
-
-# Define notification methods
-methods <- c("Email", "Call", "Physical mail", "Secure website login")
-
-# Analyze the ResultNotification column
-ResultSummary <- SurveyResponses %>%
-  mutate(
-    # Split each entry into individual methods
-    items = str_split(ResultNotification, pattern = ",\\s*"),
-    
-    # Count how many methods appear in the entry
-    method_count = sapply(items, function(x) sum(methods %in% x))
-  )
-
-# Count frequency of each exact choice
-choice_counts <- ResultSummary %>%
-  count(ResultNotification)
-
-# Count how many selected 1, 2, 3, or 4 methods
-count_by_number <- ResultSummary %>%
-  count(method_count)
-
-choice_counts
-count_by_number
 
 ```
