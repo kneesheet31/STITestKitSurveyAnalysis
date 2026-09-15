@@ -51,36 +51,45 @@ chisq.test(tbl_behavior_sti)
 #Logistic regression
 SurveyResponses <- SurveyResponses %>%
   mutate(
-    willingness_test_numeric = case_when(
-      `WillingnessTest` == "Definitely Willing" ~ 5,
-      `WillingnessTest` == "Probably Willing" ~ 4,
-      `WillingnessTest` == "Unsure" ~ 3,
-      `WillingnessTest` == "Probably Not Willing" ~ 2,
-      `WillingnessTest` == "Definitely Not Willing" ~ 1,
+    willingness_test_binary = case_when(
+      `WillingnessTest` %in% c("Definitely Willing", "Probably Willing") ~ 1,
+      `WillingnessTest` %in% c("Unsure", "Probably Not Willing", "Definitely Not Willing") ~ 0,
       TRUE ~ NA_real_
     ),
-    
-    willingness_test_paid_numeric = case_when(
-      `WillingnessTestPaid` == "Definitely Willing" ~ 5,
-      `WillingnessTestPaid` == "Probably Willing" ~ 4,
-      `WillingnessTestPaid` == "Unsure" ~ 3,
-      `WillingnessTestPaid` == "Probably Not Willing" ~ 2,
-      `WillingnessTestPaid` == "Definitely Not Willing" ~ 1,
+    `Sexual Behaviors` = as.factor(`Sexual Behaviors`)
+  )
+
+SurveyResponses <- SurveyResponses %>%
+  mutate(
+    willingness_test_paid_binary = case_when(
+      `WillingnessTestPaid` %in% c("Definitely Willing", "Probably Willing") ~ 1,
+      `WillingnessTestPaid` %in% c("Unsure", "Probably Not Willing", "Definitely Not Willing") ~ 0,
       TRUE ~ NA_real_
     )
   )
 
+
 #Models
-lm_will <- lm(
-  willingness_test_numeric ~ `Sexual Behaviors`,
-  data = SurveyResponses
+model_logit <- glm(
+  willingness_test_binary ~ `Sexual Behaviors`,
+  data = SurveyResponses,
+  family = binomial
 )
-summary(lm_will)
+summary(model_logit)
 
 
-lm_paid <- lm(
-  willingness_test_paid_numeric ~ `Sexual Behaviors`,
-  data = SurveyResponses
+model_logit_paid <- glm(
+  willingness_test_paid_binary ~ `Sexual Behaviors`,
+  data = SurveyResponses,
+  family = binomial
 )
-summary(lm_paid)
+summary(model_logit_paid)
+
+
+model_logit_multi <- glm(
+  willingness_test_binary ~ `Sexual Behaviors` + Gender + `Health Insurance` + `Age Group`,
+  data = SurveyResponses,
+  family = binomial
+)
+summary(model_logit_multi)
 ```
