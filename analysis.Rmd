@@ -49,6 +49,38 @@ tbl_behavior_sti <- table(SurveyResponses$`Sexual Behaviors`,SurveyResponses$`Po
 chisq.test(tbl_behavior_sti)
 
 #Logistic regression
+SurveyResponses <- SurveyResponses %>%
+  mutate(
+    willingness_test_numeric = case_when(
+      `WillingnessTest` == "Definitely Willing" ~ 5,
+      `WillingnessTest` == "Probably Willing" ~ 4,
+      `WillingnessTest` == "Unsure" ~ 3,
+      `WillingnessTest` == "Probably Not Willing" ~ 2,
+      `WillingnessTest` == "Definitely Not Willing" ~ 1,
+      TRUE ~ NA_real_
+    ),
+    
+    willingness_test_paid_numeric = case_when(
+      `WillingnessTestPaid` == "Definitely Willing" ~ 5,
+      `WillingnessTestPaid` == "Probably Willing" ~ 4,
+      `WillingnessTestPaid` == "Unsure" ~ 3,
+      `WillingnessTestPaid` == "Probably Not Willing" ~ 2,
+      `WillingnessTestPaid` == "Definitely Not Willing" ~ 1,
+      TRUE ~ NA_real_
+    )
+  )
+
+#Models
+lm_will <- lm(
+  willingness_test_numeric ~ `Sexual Behaviors`,
+  data = SurveyResponses
+)
+summary(lm_will)
 
 
+lm_paid <- lm(
+  willingness_test_paid_numeric ~ `Sexual Behaviors`,
+  data = SurveyResponses
+)
+summary(lm_paid)
 ```
