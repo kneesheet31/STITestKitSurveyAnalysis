@@ -42,14 +42,21 @@ table(SurveyResponses$`Sexual orientation`, SurveyResponses$`WillingnessTest`)
 table(SurveyResponses$Gender, SurveyResponses$`WillingnessTestPaid`)
 
 #Chi square tests
-tbl_gender_checkup <- table(SurveyResponses$Gender,SurveyResponses$`Healthcare Checkup`)
-chisq.test(tbl_gender_checkup)
-
-tbl_insurance_checkup <- table(SurveyResponses$`Health Insurance`,SurveyResponses$`Healthcare Checkup`)
-chisq.test(tbl_insurance_checkup)
+tbl_gender_willingnesstest <- table(SurveyResponses$Gender,SurveyResponses$`WillingnessTest`)
+chisq.test(tbl_gender_willingnesstest, simulate.p.value = TRUE)
+fisher.test(tbl_gender_willingnesstest)
 
 tbl_behavior_sti <- table(SurveyResponses$`Sexual Behaviors`,SurveyResponses$`Positive STI Test`)
-chisq.test(tbl_behavior_sti)
+chisq.test(tbl_behavior_sti, simulate.p.value = TRUE)
+fisher.test(tbl_behavior_sti)
+
+tbl_behavior_willingnesstest <- table(SurveyResponses$`Sexual Behaviors`,SurveyResponses$`WillingnessTest`)
+chisq.test(tbl_behavior_willingnesstest, simulate.p.value = TRUE)
+fisher.test(tbl_behavior_willingnesstest)
+
+tbl_behavior_willingnesstestpaid <- table(SurveyResponses$`Sexual Behaviors`,SurveyResponses$`WillingnessTestPaid`)
+chisq.test(tbl_behavior_willingnesstestpaid, simulate.p.value = TRUE)
+fisher.test(tbl_behavior_willingnesstestpaid)
 
 #Logistic regression
 SurveyResponses <- SurveyResponses %>%
