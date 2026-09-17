@@ -180,20 +180,12 @@ hist(IndividualDropoff$dropoff,
 # Likert scale questions
 # SampleCollectionCorrect, AccurateResults, AccuratelyInterpretResults,PositiveTestNextSteps
 score_map <- c(
-  "strongly agree" = 5,
-  "somewhat agree" = 4,
-  "neither agree nor disagree" = 3,
-  "somewhat disagree" = 2,
-  "strongly disagree" = 1
+  "Strongly agree" = 5,
+  "Somewhat agree" = 4,
+  "Neither agree nor disagree" = 3,
+  "Somewhat disagree" = 2,
+  "Strongly disagree" = 1
 )
-
-SurveyResponses_clean <- SurveyResponses %>%
-  mutate(
-    SampleCollectionCorrect_num = score_map[str_to_lower(str_trim(SampleCollectionCorrect))],
-    AccurateResults_num = score_map[str_to_lower(str_trim(AccurateResults))],
-    AccuratelyInterpretResults_num = score_map[str_to_lower(str_trim(AccuratelyInterpretResults))],
-    PositiveTestNextSteps_num = score_map[str_to_lower(str_trim(PositiveTestNextSteps))]
-  )
 
 averages <- SurveyResponses_clean %>%
   summarise(
