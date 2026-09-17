@@ -176,4 +176,38 @@ hist(IndividualDropoff$dropoff,
      col = "skyblue",
      border = "black")
 
+
+# Likert scale questions
+# SampleCollectionCorrect, AccurateResults, AccuratelyInterpretResults,PositiveTestNextSteps
+score_map <- c(
+  "strongly agree" = 5,
+  "somewhat agree" = 4,
+  "neither agree nor disagree" = 3,
+  "somewhat disagree" = 2,
+  "strongly disagree" = 1
+)
+
+SurveyResponses_clean <- SurveyResponses %>%
+  mutate(
+    SampleCollectionCorrect_num = score_map[str_to_lower(str_trim(SampleCollectionCorrect))],
+    AccurateResults_num = score_map[str_to_lower(str_trim(AccurateResults))],
+    AccuratelyInterpretResults_num = score_map[str_to_lower(str_trim(AccuratelyInterpretResults))],
+    PositiveTestNextSteps_num = score_map[str_to_lower(str_trim(PositiveTestNextSteps))]
+  )
+
+# Compute averages for each column
+averages <- SurveyResponses_clean %>%
+  summarise(
+    SampleCollectionCorrect_avg = mean(SampleCollectionCorrect_num, na.rm = TRUE),
+    AccurateResults_avg = mean(AccurateResults_num, na.rm = TRUE),
+    AccuratelyInterpretResults_avg = mean(AccuratelyInterpretResults_num, na.rm = TRUE),
+    PositiveTestNextSteps_avg = mean(PositiveTestNextSteps_num, na.rm = TRUE)
+  )
+
+averages
+
+# Identify which column has the highest average
+highest_avg <- names(averages)[which.max(averages)]
+highest_avg
+
 ```
