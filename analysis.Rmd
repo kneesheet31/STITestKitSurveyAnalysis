@@ -37,6 +37,9 @@ table(SurveyResponses$Gender, SurveyResponses$`Healthcare Checkup`)
 table(SurveyResponses$`Health Insurance`, SurveyResponses$`Healthcare Checkup`)
 table(SurveyResponses$Gender, SurveyResponses$`Health Insurance`)
 table(SurveyResponses$`Sexual Behaviors`, SurveyResponses$`Positive STI Test`)
+table(SurveyResponses$Gender, SurveyResponses$`WillingnessTest`)
+table(SurveyResponses$`Sexual orientation`, SurveyResponses$`WillingnessTest`)
+table(SurveyResponses$Gender, SurveyResponses$`WillingnessTestPaid`)
 
 #Chi square tests
 tbl_gender_checkup <- table(SurveyResponses$Gender,SurveyResponses$`Healthcare Checkup`)
