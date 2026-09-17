@@ -195,7 +195,6 @@ SurveyResponses_clean <- SurveyResponses %>%
     PositiveTestNextSteps_num = score_map[str_to_lower(str_trim(PositiveTestNextSteps))]
   )
 
-# Compute averages for each column
 averages <- SurveyResponses_clean %>%
   summarise(
     SampleCollectionCorrect_avg = mean(SampleCollectionCorrect_num, na.rm = TRUE),
@@ -205,9 +204,5 @@ averages <- SurveyResponses_clean %>%
   )
 
 averages
-
-# Identify which column has the highest average
-highest_avg <- names(averages)[which.max(averages)]
-highest_avg
 
 ```
