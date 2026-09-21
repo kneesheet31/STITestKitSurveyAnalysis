@@ -77,7 +77,6 @@ SurveyResponses <- SurveyResponses %>%
     )
   )
 
-
 #Models
 model_logit <- glm(
   willingness_test_binary ~ `Sexual Behaviors`,
@@ -103,78 +102,16 @@ model_logit_multi <- glm(
 summary(model_logit_multi)
 
 
-
 #Score drop offs
 # WillingnessTest (willing to use a test kit) 
 #Definitely willing: 17, Probably willing: 7, Unsure: 5 Probably not willing: 0, Definitely not willing: 0 
 # WillingnessTestPaid (willingness to pay for a test kit) Definitely willing: 7, Probably willing: 9, Unsure: 10, Probably not willing: 2, Definitely not willing: 1 
 
-score_map <- c(
-  "Definitely Willing" = 5,
-  "Probably Willing" = 4,
-  "Unsure" = 3,
-  "Probably Not Willing" = 2,
-  "Definitely Not Willing" = 1
-)
-
-willingnesstest_counts <- c(
-  "Definitely Willing" = 17,
-  "Probably Willing" = 7,
-  "Unsure" = 5,
-  "Probably Not Willing" = 0,
-  "Definitely Not Willing" = 0
-)
-
-willingnesstest_counts <- c(
-  "Definitely Willing" = 7,
-  "Probably Willing" = 9,
-  "Unsure" = 10,
-  "Probably Not Willing" = 2,
-  "Definitely Not Willing" = 1
-)
-
-df <- data.frame(
-  Category = names(free_counts),
-  Free = as.numeric(free_counts),
-  Paid = as.numeric(paid_counts)
-)
-
-df <- df %>%
-  mutate(Change = Paid - Free)
-
-df
-
-
-# Visuals
-unique(SurveyResponses$WillingnessTest)
-unique(SurveyResponses$WillingnessTestPaid)
 
 IndividualDropoff <- SurveyResponses %>%
   mutate(
-    WillingnessTest_num = score_map[WillingnessTest],
-    WillingnessTestPaid_num = score_map[WillingnessTestPaid],
     dropoff = WillingnessTest_num - WillingnessTestPaid_num
   )
-
-table(IndividualDropoff$dropoff)
-
-# Summary
-summary_dropoff <- IndividualDropoff %>%
-  summarise(
-    avg_dropoff = mean(dropoff, na.rm = TRUE),
-    median_dropoff = median(dropoff, na.rm = TRUE),
-    sd_dropoff = sd(dropoff, na.rm = TRUE)
-  )
-
-summary_dropoff
-
-# Histogram 
-hist(IndividualDropoff$dropoff,
-     breaks = seq(-4, 4, by = 1),
-     main = "Histogram of Individual Score Drop-offs",
-     xlab = "Drop-off Amount (Free - Paid)",
-     col = "skyblue",
-     border = "black")
 
 
 # Likert scale questions
