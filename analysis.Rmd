@@ -197,4 +197,52 @@ averages <- SurveyResponses_clean %>%
 
 averages
 
+
+# Location
+table(SurveyResponses$`Location`)
+
+LocationSummary <- SurveyResponses %>%
+  mutate(
+    items = str_split(Location, pattern = ",\\s*"),
+    location_count = sapply(items, length)
+  )
+
+count_by_number <- LocationSummary %>%
+  count(location_count)
+
+count_by_number
+
+# Sample Method
+methods <- c("Oral Swab", "Urine Sample", "Finger Prick")
+
+SampleMethodSummary <- SurveyResponses %>%
+  mutate(
+    items = str_split(SampleMethod, pattern = ",\\s*"),
+    method_count = sapply(items, length)
+  )
+
+count_by_number <- SampleMethodSummary %>%
+  count(method_count)
+
+count_by_number
+
+# Result Notification
+methods <- c(
+  "Email Notification",
+  "Call Notification",
+  "Physical Mail Notification",
+  "Secure Website Login"
+)
+
+ResultSummary <- SurveyResponses %>%
+  mutate(
+    items = str_split(`Result Notification`, pattern = ",\\s*"),
+    method_count = sapply(items, length)
+  )
+
+count_by_number <- ResultSummary %>%
+  count(method_count)
+
+count_by_number
+
 ```
